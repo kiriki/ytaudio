@@ -1,0 +1,12 @@
+.idea
+node_modules/
+__pycache__
+*.pyc
+.env
+.pytest_cache
+.mypy_cache
+/env
+build
+*.egg-info
+package-lock.json
+
