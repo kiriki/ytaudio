@@ -5,12 +5,153 @@ description = ""
 authors = ["Kirill Che (w) <kiriciri@gmail.com>"]
 readme = "README.md"
 
+packages = [
+    { include = "server" }
+]
+
 [tool.poetry.dependencies]
 python = "^3.11"
+
 django = "^4.2"
 djangorestframework = "^3.14.0"
 djangorestframework-simplejwt = "^5.2.2"
+psycopg2-binary = "^2.9.6"
+python-decouple = "^3.8"
+django-split-settings = "^1.2.0"
+argon2-cffi = "^21.3.0"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+pytest-django = "^4.5.2"
+pytest-env = "^0.8.1"
+pre-commit = "^3.2.2"
+mypy = "^1.2.0"
+django-stubs = "^1.16.0"
+djangorestframework-stubs = "^1.10.0"
+
+[tool.isort]
+#https://pycqa.github.io/isort/index.html
+profile = "pycharm"
+known_local_folder = ["apps"]
+known_django = ["django"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "DJANGO", "FIRSTPARTY", "LOCALFOLDER"]
+skip = ["migrations", ".venv"]
+line_length = 120
+case_sensitive = true
+lines_after_imports = -1
+include_trailing_comma = true
+ensure_newline_before_comments = false
+force_grid_wrap = 0
+
+[tool.mypy]
+#enable_error_code = ['truthy-bool', 'redundant-expr', 'unused-awaitable', 'ignore-without-code']
+#allow_redefinition = false
+#check_untyped_defs = true
+#
+#disallow_untyped_decorators = true
+#disallow_any_explicit = true
+#disallow_any_generics = true
+#disallow_untyped_calls = true
+#explicit_package_bases = true
+#ignore_errors = false
+#ignore_missing_imports = true
+#implicit_reexport = false
+#local_partial_types = true
+#strict_optional = true
+#strict_equality = true
+#show_error_codes = true
+#no_implicit_optional = true
+#warn_unused_ignores = true
+#warn_redundant_casts = true
+#warn_unused_configs = true
+#warn_unreachable = true
+#warn_no_return = true
+
+plugins = ['mypy_django_plugin.main']
+
+[[tool.mypy.overrides]]
+module = "server.apps.*.migrations.*"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "server.settings"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra --strict-markers --no-migrations --reuse-db -p no:warnings"
+testpaths = [
+    "tests",
+    "integration",
+]
+env = [
+    'DJANGO_SETTINGS_MODULE=server.settings_test',
+]
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+
+DJANGO_SETTINGS_MODULE = 'server.settings_test'
+django_debug_mode = false
+
+[tool.black]
+target-version = ['py311']
+line-length = 120
+skip-string-normalization = true
+force-exclude = "migrations"
+
+[tool.ruff]
+select = ["ALL"]
+ignore = [
+    "D",
+    "T201",
+    "E501",
+    "I001",    # unsorted-imports
+    "RUF001",  # ambiguous-unicode-character-*
+    "RUF002",
+    "RUF003",
+    "RUF100",
+    "TCH002",
+    "TCH003",
+    "ANN101",  # missing-type-self
+    "ANN102",  # missing-type-self
+    "ERA001",  # commented-out-code
+    "S105",
+    "COM812",
+    "S324",
+    "G004",
+    "PLR0913",
+]
+
+fixable = ["Q", "UP", "SIM", "PT", "ANN", "RET", "PLR"]
+exclude = ["migrations"]
+
+#fixable = []
+#unfixable = ["D"]
+line-length = 120
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"*test_*.py" = ["S101", "ARG001", "ARG002"]
+"conftest.py" = ["ARG001"]
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "single"
+
+[tool.ruff.flake8-type-checking]
+strict = true
+
+[tool.ruff.flake8-builtins]
+builtins-ignorelist = ["id", "__name__"]
+
+[tool.ruff.flake8-bugbear]
+#extend-immutable-calls = []
+
+[tool.ruff.pep8-naming]
+classmethod-decorators = [
+    "classmethod",
+#    "pydantic.validator",
+]
+
+[tool.ruff.flake8-pytest-style]
+fixture-parentheses = false
 
 [build-system]
 requires = ["poetry-core"]

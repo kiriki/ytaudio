@@ -9,4 +9,4 @@ __pycache__
 build
 *.egg-info
 package-lock.json
-
+db.sqlite3
