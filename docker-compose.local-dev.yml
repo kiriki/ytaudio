@@ -4,12 +4,12 @@ version: "3.5"
 services:
   postgres:
     image: timescale/timescaledb:latest-pg15
-    volumes:
-      - pg_data_vol:/var/lib/postgresql/data
     environment:
       POSTGRES_USER : ${APP_DB_NAME:-docker}
       POSTGRES_PASSWORD: ${APP_DB_PASSWORD:-docker}
       POSTGRES_DB: ${APP_DB_NAME:-docker}
+    volumes:
+      - pg_data_vol:/var/lib/postgresql/data
     ports:
       - ${APP_DB_PORT:-5432}:5432
 
