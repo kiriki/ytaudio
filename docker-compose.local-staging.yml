@@ -1,6 +1,6 @@
 # local staging compose
 version: "3.8"
-
+name: "ytaudio staging"
 services:
   db-pg:
     image: postgres:15-alpine
@@ -8,15 +8,12 @@ services:
     env_file: ./api/config/.env
 #    environment:
 #      POSTGRES_USER : ${APP_DB_NAME:-docker}
-#      POSTGRES_USER : ${APP_DB_NAME:-docker}
 #      POSTGRES_PASSWORD: ${APP_DB_PASSWORD:-docker}
 #      POSTGRES_DB: ${APP_DB_NAME:-docker}
     volumes:
       - pg_data_vol1:/var/lib/postgresql/data
     networks:
-      - mynet-st
-#    ports:
-#      - "5432:5432"
+      - net-stg
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U docker -d docker" ]
       interval: 10s
@@ -41,7 +38,7 @@ services:
       - db-pg
 #      - amqp
     networks:
-      - mynet-st
+      - net-stg
     env_file: ./api/config/.env
     environment:
       APP_API_PORT: 8000
@@ -49,6 +46,7 @@ services:
 #      APP_SERVICE_URL: amqp://guest:guest@amqp:5672/
       DJANGO_SETTINGS_MODULE: server.settings
       DJANGO_DATABASE_HOST: db-pg
+      DJANGO_ENV: production
     volumes:
       - static_vol:/app/staticfiles
       - media_vol:/app/mediafiles
@@ -69,27 +67,10 @@ services:
       - api
       - front
     networks:
-      - mynet-st
-
-#  amqp:
-#    image: rabbitmq:3.8.2-management
-#    ports:
-#      - ${APP_AMQP_PORT:-5672}:5672
-#      - ${APP_AMQP_GUI_PORT:-15672}:15672
-#
-#  balancer:
-#    image: nginx:1.17.8
-#    network_mode: host
-#    volumes:
-#      - ./nginx/develop.template:/etc/nginx/conf.d/default.template:ro
-#    command: /bin/bash -c "envsubst '$${API_LOC},$${GUI_LOC},$${WS_LOC}' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
-#    environment:
-#      - API_LOC=${APP_API_LOC:-http://127.0.0.1:8000}
-#      - GUI_LOC=${APP_GUI_LOC:-http://127.0.0.1:3000}
-#      - WS_LOC=${APP_GUI_LOC:-http://127.0.0.1:8080}
+      - net-stg
 
 networks:
-  mynet-st:
+  net-stg:
     driver: bridge
 
 volumes:

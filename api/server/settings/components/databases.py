@@ -10,5 +10,6 @@ DATABASES = {
         'USER': config('POSTGRES_USER'),
         'PASSWORD': config('POSTGRES_PASSWORD'),
         'HOST': config('DJANGO_DATABASE_HOST'),
+        'PORT': config('DJANGO_DATABASE_PORT'),
     }
 }

@@ -1,1 +1,1 @@
-from server.settings import *  # noqa
+from server.settings import *  # noqaF403

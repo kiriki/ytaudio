@@ -1,18 +1,18 @@
-# This is compose file using only local develop
+# local dev compose (db only)
 version: "3.5"
-
+name: "ytaudio dev"
 services:
   postgres:
     image: timescale/timescaledb:latest-pg15
-    environment:
-      POSTGRES_USER : ${APP_DB_NAME:-docker}
-      POSTGRES_PASSWORD: ${APP_DB_PASSWORD:-docker}
-      POSTGRES_DB: ${APP_DB_NAME:-docker}
+    container_name: db_pg_dev
+    env_file: ./api/config/.env
     volumes:
       - pg_data_vol:/var/lib/postgresql/data
     ports:
-      - ${APP_DB_PORT:-5432}:5432
-
+      - ${DJANGO_DATABASE_PORT:-5432}:5432
+#    command: -p 5433
+    networks:
+      - net-dev
 
 #  amqp:
 #    image: rabbitmq:3.8.2-management
@@ -33,3 +33,7 @@ services:
 
 volumes:
   pg_data_vol: { }
+
+networks:
+  net-dev:
+    driver: bridge

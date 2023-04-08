@@ -6,11 +6,9 @@ SECURITY WARNING: don't run with debug turned on in production!
 from server.settings.components import config
 from server.settings.components.databases import DATABASES
 
-# Production flags:
-# https://docs.djangoproject.com/en/2.2/howto/deployment/
-
 DEBUG = True
 
+# https://docs.djangoproject.com/en/4.2/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [
     config('DOMAIN_NAME'),
     'localhost',
@@ -20,21 +18,20 @@ ALLOWED_HOSTS = [
 ]
 
 # Static files:
-# https://docs.djangoproject.com/en/4.1/ref/settings/#std:setting-STATICFILES_DIRS
+# https://docs.djangoproject.com/en/4.2/ref/settings/#std:setting-STATICFILES_DIRS
 
 # Additional locations of static files
 STATICFILES_DIRS: list[str] = []
 
-# Disable persistent DB connections
-# https://docs.djangoproject.com/en/4.1/ref/databases/#caveats
-DATABASES['default']['CONN_MAX_AGE'] = 0
-
-
+# https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-INTERNAL_IPS
 INTERNAL_IPS = [
     '127.0.0.1',
-    '192.168.7.55',
 ]
-#
+
 # DEBUG_TOOLBAR_CONFIG = {
 #     'SHOW_TOOLBAR_CALLBACK': lambda request: True,
 # }
+
+# Disable persistent DB connections
+# https://docs.djangoproject.com/en/4.2/ref/databases/#caveats
+DATABASES['default']['CONN_MAX_AGE'] = 0
