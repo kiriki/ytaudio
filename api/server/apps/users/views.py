@@ -13,7 +13,12 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 
 from server.apps.users.pagination import UsersPagination
-from server.apps.users.serializers import LoginSerializer, MeSerializer, UserListSerializer, UserSerializer
+from server.apps.users.serializers import (
+    LoginSerializer,
+    MeSerializer,
+    UserListSerializer,
+    UserSerializer,
+)
 
 
 class LoginView(APIView):
@@ -31,8 +36,7 @@ class LoginView(APIView):
                 response_serializer = MeSerializer(instance=user)
                 response = Response(response_serializer.data)
                 return response
-            else:
-                raise AuthenticationFailed('Invalid credentials')
+            raise AuthenticationFailed('Invalid credentials')
         except User.DoesNotExist:
             raise AuthenticationFailed('Invalid credentials')
 

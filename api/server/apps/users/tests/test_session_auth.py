@@ -32,7 +32,10 @@ def test_auth_using_login_pass(anon_client: APIClient, user_with_password: User)
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    response = anon_client.post('/api/auth/login/', data={'username': username, 'password': TEST_PASSWORD})
+    response = anon_client.post(
+        '/api/auth/login/',
+        data={'username': username, 'password': TEST_PASSWORD},
+    )
     assert response.status_code == status.HTTP_200_OK, response.content
 
     data = response.json()

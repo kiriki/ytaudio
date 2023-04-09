@@ -3,6 +3,7 @@ import os
 from collections.abc import Callable
 
 import gunicorn.app.base
+
 from django.core.handlers.wsgi import WSGIHandler
 from django.core.wsgi import get_wsgi_application
 
@@ -21,8 +22,11 @@ class PyApplication(gunicorn.app.base.BaseApplication):
         super().__init__()
 
     def load_config(self) -> None:
-        config = {key: value for key, value in self.options.items()
-                  if key in self.cfg.settings and value is not None}
+        config = {
+            key: value
+            for key, value in self.options.items()
+            if key in self.cfg.settings and value is not None
+        }
         for key, value in config.items():
             self.cfg.set(key.lower(), value)
 
