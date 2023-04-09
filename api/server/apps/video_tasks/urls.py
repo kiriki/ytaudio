@@ -9,4 +9,6 @@ app_name = 'video_tasks'
 router = routers.DefaultRouter()
 router.register('', VideoSourceModelViewSet)
 
-urlpatterns = [path('', include(router.urls))]
+urlpatterns = [
+    path('', include(router.urls)),
+]
