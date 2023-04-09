@@ -1,12 +1,13 @@
 # Celery application definition
-# http://docs.celeryproject.org/en/v4.1.0/userguide/configuration.html
+# https://docs.celeryq.dev/en/v5.2.7/userguide/configuration.html
+from . import config
 
-CELERY_BROKER_URL = 'redis://localhost'
-# CELERY_RESULT_BACKEND = 'redis://localhost'
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = f'redis://{config("REDIS_HOST")}'
+CELERY_RESULT_BACKEND = f'redis://{config("REDIS_HOST")}'
+# CELERY_RESULT_BACKEND = 'django-db'
 CELERY_RESULT_EXTENDED = True
 
-CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
+CELERY_ACCEPT_CONTENT = ['application/json']  # 'pickle'
 
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

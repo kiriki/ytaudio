@@ -36,6 +36,7 @@ services:
 #    restart: on-failure
     depends_on:
       - db-pg
+      - redis
 #      - amqp
     networks:
       - net-stg
@@ -46,10 +47,26 @@ services:
 #      APP_SERVICE_URL: amqp://guest:guest@amqp:5672/
       DJANGO_SETTINGS_MODULE: server.settings
       DJANGO_DATABASE_HOST: db-pg
+      REDIS_HOST: redis
       DJANGO_ENV: production
     volumes:
       - static_vol:/app/staticfiles
       - media_vol:/app/mediafiles
+  celery_worker:
+    image: app/app_api
+#    command: /start-celeryworker
+    entrypoint: bash -c "celery -A server worker -l info"
+    env_file: ./api/config/.env
+    environment:
+      DJANGO_SETTINGS_MODULE: server.settings
+      DJANGO_DATABASE_HOST: db-pg
+      REDIS_HOST: redis
+      DJANGO_ENV: production
+    depends_on:
+      - db-pg
+      - redis
+    networks:
+      - net-stg
   front:
     build:
       context: ./frontend
@@ -68,7 +85,10 @@ services:
       - front
     networks:
       - net-stg
-
+  redis:
+    image: redis:alpine
+    networks:
+      - net-stg
 networks:
   net-stg:
     driver: bridge
