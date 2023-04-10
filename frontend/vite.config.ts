@@ -28,8 +28,8 @@ export default defineConfig({
     },
   },
   server: {
-    host: 'localhost',
-    port: 3000,
+    host: true,
+    port: 8080,
     proxy: {
       '/api': {
         target: 'http://docs.altec.test:5000',

@@ -13,7 +13,18 @@ services:
 #    command: -p 5433
     networks:
       - net-dev
-
+  front:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+      target: dev
+    image: app/app_front_dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - net-dev
 #  amqp:
 #    image: rabbitmq:3.8.2-management
 #    ports:

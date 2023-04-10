@@ -1,14 +1,17 @@
 #based on https://v2.vuejs.org/v2/cookbook/dockerize-vuejs-app.html
-FROM node:lts-alpine as front
+FROM node:lts-alpine as base
 #RUN yarn global add http-server
 WORKDIR /app
 COPY package*.json ./
-RUN yarn
+COPY yarn.lock .
+RUN yarn install
 COPY . .
+
+FROM base as prod
 RUN yarn build-only
 
-#EXPOSE 8080
-#CMD [ "http-server", "dist", "-p", "8080" ]
+FROM base as dev
+CMD [ "yarn", "dev" ]
 
 #FROM nginx:alpine
 #RUN mkdir /var/www /var/www/frontend
