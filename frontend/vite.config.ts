@@ -8,6 +8,15 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
+import Unocss from 'unocss/vite'
+import {
+  presetAttributify,
+  presetIcons,
+  presetUno,
+  transformerDirectives,
+  transformerVariantGroup,
+} from 'unocss'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -19,7 +28,25 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({
+        importStyle: 'sass',
+      })],
+    }),
+    // https://github.com/antfu/unocss
+    // see unocss.config.ts for config
+    Unocss({
+      presets: [
+        presetUno(),
+        presetAttributify(),
+        presetIcons({
+          scale: 1.2,
+          warn: true,
+        }),
+      ],
+      transformers: [
+        transformerDirectives(),
+        transformerVariantGroup(),
+      ]
     }),
   ],
   resolve: {
@@ -27,6 +54,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@use "@/styles/element/index.scss" as *;`,
+  //     },
+  //   },
+  // },
   server: {
     host: true,
     port: 8080,
