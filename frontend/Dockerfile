@@ -3,7 +3,7 @@ FROM node:lts-alpine as base
 #RUN yarn global add http-server
 WORKDIR /app
 COPY package*.json ./
-COPY yarn.lock .
+#COPY yarn.lock .
 RUN yarn install
 COPY . .
 
