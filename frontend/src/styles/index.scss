@@ -1,0 +1,47 @@
+// styles to import at main.ts
+
+// import dark theme
+@use "element-plus/theme-chalk/src/dark/css-vars.scss" as *;
+
+//:root {
+//  --ep-color-primary: red;
+//}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+  "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 6px; /* width of the entire scrollbar */
+  //scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #0003;
+    opacity: 0.7;
+    border-radius: 10px;
+    transition: all .2s ease-in-out;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #fff3;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+a {
+  color: var(--ep-color-primary);
+}
+
+code {
+  border-radius: 2px;
+  padding: 2px 4px;
+  background-color: var(--ep-color-primary-light-9);
+  color: var(--ep-color-primary);
+}

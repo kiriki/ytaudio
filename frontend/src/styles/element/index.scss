@@ -1,0 +1,48 @@
+$--colors: (
+  'primary': (
+    'base': green,
+    //'base': hsl(210, 100%, 63%),
+  ),
+  'success': (
+    //'base': #21ba45,
+    'base': hsl(100, 54%, 29%),
+  ),
+  'warning': (
+    //'base': #f2711c,
+    'base': hsl(36, 77%, 57%),
+  ),
+  'danger': (
+    //'base': #db2828,
+    'base': hsl(0, 87%, 69%),
+  ),
+  'error': (
+    //'base': #db2828,
+    'base': hsl(0, 87%, 69%),
+  ),
+  'info': (
+    //'base': #42b8dd,
+    'base': hsl(220, 4%, 58%),
+  ),
+);
+
+// we can add this to custom namespace, default is 'el'
+@forward "element-plus/theme-chalk/src/mixins/config.scss" with (
+  $namespace: "ep"
+);
+
+// You should use them in scss, because we calculate it by sass.
+// comment next lines to use default color
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  // do not use same name, it will override.
+  $colors: $--colors,
+  $button-padding-horizontal: ("default": 50px)
+);
+
+// if you want to import all
+// @use "element-plus/theme-chalk/src/index.scss" as *;
+
+// You can comment it to hide debug info.
+// @debug $--colors;
+
+// custom dark variables
+@use "./dark.scss";
