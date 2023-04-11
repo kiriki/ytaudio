@@ -1,5 +1,5 @@
 # local dev compose (db only)
-version: "3.5"
+version: "3.8"
 name: "ytaudio dev"
 services:
   postgres:

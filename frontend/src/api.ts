@@ -12,10 +12,10 @@ interface ErrorData {
 
 axios.defaults.baseURL = (import.meta.env.VUE_APP_API_ENDPOINT ?? '') as string
 
-const api = (path = '') => {
+const api = (path = 'api/v1') => {
   const authStore = useAuthStore()
   const defaultOptions: AxiosRequestConfig = {
-    baseURL: `${axios.defaults.baseURL}/api/${path}`,
+    baseURL: `${axios.defaults.baseURL}/${path}`,
     paramsSerializer: { indexes: null },
     headers: { Authorization: authStore.jwtToken }
   }
