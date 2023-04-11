@@ -66,7 +66,8 @@ export default defineConfig({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'http://docs.altec.test:5000',
+        target: 'http://host.docker.internal:8000',
+        // target: 'http://localhost:8000',
         changeOrigin: true,
       }
     },

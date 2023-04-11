@@ -11,6 +11,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/4.2/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [
     config('DOMAIN_NAME'),
+    'host.docker.internal',
     'localhost',
     '0.0.0.0',  # noqa: S104
     '127.0.0.1',
