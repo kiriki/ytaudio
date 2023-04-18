@@ -1,35 +1,24 @@
+from __future__ import annotations
+
 import pytest
-from rest_framework.test import APIClient
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth.models import User
 
-TEST_USER = 'test_user'
-ADMIN_NAME = 'admin'
+TEST_PASSWORD = 'test_pass'
 
 
 @pytest.fixture
-def anon_client() -> APIClient:
-    return APIClient()
+def user_with_password(user: User) -> User:
+    user.set_password(TEST_PASSWORD)
+    user.save()
+    return user
 
 
 @pytest.fixture
-def user() -> User:
-    return User.objects.create_user(username=TEST_USER, is_superuser=True)
-
-
-@pytest.fixture
-def client(anon_client: APIClient, user: User) -> APIClient:
-    anon_client.force_authenticate(user)
-    return anon_client
-
-
-@pytest.fixture
-def admin() -> User:
-    return User.objects.create_user(username=ADMIN_NAME, is_staff=True)
-
-
-@pytest.fixture
-def admin_client(admin: User) -> APIClient:
-    client = APIClient()
-    client.force_authenticate(admin)
-    return client
+def jwt_tokens(user_with_password: User):
+    refresh = RefreshToken.for_user(user_with_password)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }

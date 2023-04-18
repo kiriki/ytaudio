@@ -10,11 +10,10 @@ class VideoSourceCreateSerializer(ModelSerializer):
     class Meta:
         model = VideoSource
         fields = ('id', 'url', 'user')
-        read_only_fields = ('id',)
+        read_only_fields = ('id', 'user')
 
     def create(self, validated_data: dict) -> VideoSource:
-        # name = validated_data.get('name')
-        # validated_data['name'] = name or validated_data['file'].name
+        validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
 
 

@@ -11,13 +11,6 @@ from django.urls import reverse
 TEST_PASSWORD = 'test_pass'
 
 
-@pytest.fixture
-def user_with_password(user: User) -> User:
-    user.set_password(TEST_PASSWORD)
-    user.save()
-    return user
-
-
 @pytest.mark.django_db()
 def test_login_jwt(anon_client: APIClient, user_with_password: User):
     """

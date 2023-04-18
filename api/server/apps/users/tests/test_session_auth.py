@@ -16,13 +16,6 @@ TEST_PASSWORD = 'test_pass'
 users_path = reverse('api:user-list')
 
 
-@pytest.fixture
-def user_with_password(user: User) -> User:
-    user.set_password(TEST_PASSWORD)
-    user.save()
-    return user
-
-
 @pytest.mark.django_db()
 def test_auth_using_login_pass(anon_client: APIClient, user_with_password: User):
     username = user_with_password.username
