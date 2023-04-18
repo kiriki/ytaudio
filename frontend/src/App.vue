@@ -11,19 +11,7 @@
           type="flex"
         >
           <el-col :span="6">
-            <el-space
-              id="nav"
-              :size="10"
-              spacer="|"
-            >
-              <router-link to="/">
-                Home
-              </router-link>
-              <!--            <router-link to="/about">About</router-link>-->
-              <router-link to="/users">
-                users
-              </router-link>
-            </el-space>
+
           </el-col>
           <el-col
             :span="1"
@@ -41,12 +29,19 @@
             </button>
           </el-col>
         </el-row>
-        <!--      <el-col :span="2">-->
-        <!--      </el-col>-->
       </el-header>
-      <el-main>
-        <router-view />
-      </el-main>
+      <el-container>
+        <el-aside width="200px">
+          <el-menu :router="true">
+            <el-menu-item index="/">Home</el-menu-item>
+            <el-menu-item index="/users">Users</el-menu-item>
+            <el-menu-item index="/tasks">Tasks</el-menu-item>
+          </el-menu>
+        </el-aside>
+        <el-main>
+          <router-view />
+        </el-main>
+      </el-container>
     </el-container>
     <div v-else>
       <LoginForm />

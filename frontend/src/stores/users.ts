@@ -14,7 +14,7 @@ export const useUsersStore = defineStore({
 
   state: (): State => ({
     users: [],
-    total: 0
+    total: 0,
   }),
 
   actions: {
