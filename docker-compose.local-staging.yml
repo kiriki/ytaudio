@@ -1,6 +1,6 @@
 # local staging compose
 version: "3.8"
-name: "ytaudio staging"
+name: "ytaudio_staging"
 services:
   db-pg:
     image: postgres:15-alpine
