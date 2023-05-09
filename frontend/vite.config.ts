@@ -66,9 +66,13 @@ export default defineConfig({
     port: 8080,
     proxy: {
       '/api': {
-        // target: 'http://host.docker.internal:8000',
-        target: 'http://localhost:8000',
+        target: 'http://host.docker.internal:8000',
+        // target: 'http://localhost:8000',
         changeOrigin: true,
+      },
+      '/ws': {
+        target: 'ws://host.docker.internal:8000',
+        ws: true,
       }
     },
     cors: false
@@ -78,5 +82,5 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
   },
-  base:'/'
+  base: '/'
 })
