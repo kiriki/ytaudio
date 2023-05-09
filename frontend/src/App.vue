@@ -36,6 +36,7 @@
             <el-menu-item index="/">Home</el-menu-item>
             <el-menu-item index="/users">Users</el-menu-item>
             <el-menu-item index="/tasks">Tasks</el-menu-item>
+            <el-menu-item index="/debug">Debug </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main>
