@@ -3,6 +3,7 @@ import api from '@/api'
 import { Ref, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useNotifyStore } from '@/stores/notify'
+import { sleep } from '@/utils/tools'
 
 const store = useNotifyStore()
 
@@ -15,8 +16,6 @@ interface IClTask {
   task_status: string
   task_result: number
 }
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 const startTask = async (taskName: string, params = {}) => {
   const { data } = await api().post('tasks/run_task/', { task_name: taskName, params })
