@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import api from '@/api'
-import { Ref, ref } from 'vue'
+import { Ref, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useNotifyStore } from '@/stores/notify'
+
+const store = useNotifyStore()
 
 const isRunningTask = ref(false)
 const currentTask: Ref<IClTask | null> = ref(null)
@@ -25,10 +28,10 @@ const startTask = async (taskName: string, params = {}) => {
 
 const runSampleTask = async () => {
   console.log('runSampleTask')
-  isRunningTask.value = true
+  // isRunningTask.value = true
   currentTask.value = await startTask('sample_task_progress', { steps: 5 })
-  await waitTaskDone(currentTask.value.task_id)//  wait for result
-  isRunningTask.value = false
+  // await waitTaskDone(currentTask.value.task_id)//  wait for result
+  // isRunningTask.value = false
 }
 
 const waitTaskDone = async (taskId: string) => {
@@ -46,27 +49,13 @@ const waitTaskDone = async (taskId: string) => {
   return currentTask.value
 }
 
-const chatSocket = new WebSocket(`ws://${window.location.host}/ws/tasks/`)
-
-chatSocket.onopen = (e) => {
-  console.log('ws tasks open')
-  console.log(e)
-}
-
-chatSocket.onmessage = (e) => {
-  console.log('ws tasks msg')
-  const data = JSON.parse(e.data)
-  console.log(data)
-  // if (currentTask.value) {
-  //   currentTask.value.task_status = data.data.state
-  //   currentTask.value.task_result = data.data.meta['current_value']
-  // }
-}
-
-chatSocket.onclose = (e) => {
-  console.log('ws tasks close')
-  console.log(e)
-}
+watch(() => store.message, (value) => {
+  console.log(value)
+  if (currentTask.value) {
+    currentTask.value.task_status = value.data.state
+    currentTask.value.task_result = value.data.meta['current_value']
+  }
+})
 
 </script>
 

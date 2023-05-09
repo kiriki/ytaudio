@@ -57,15 +57,19 @@ import ru from 'element-plus/lib/locale/lang/ru'
 import LoginForm from '@/components/common/LoginForm.vue'
 import { toggleDark } from '@/composables'
 import { useAuthStore } from '@/stores/auth'
+import { useNotifyStore } from '@/stores/notify'
 
 const config = { locale: ru, size: 'small', zIndex: 3000 }
-const store = useAuthStore()
-const isAuth = computed(() => store.isAuth)
+const authStore = useAuthStore()
+const notifyStore = useNotifyStore()
 
-onMounted(async () => {
+const isAuth = computed(() => authStore.isAuth)
+
+onMounted(() => {
   console.log('App is mounted!')
   // todo проверять валидность токена, если присутствует
-  await store.loginRestore()
+  authStore.loginRestore()
+  notifyStore.notificationsConnect(0)
 })
 </script>
 
