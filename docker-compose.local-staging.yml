@@ -31,21 +31,18 @@ services:
       dockerfile: ./Dockerfile
     image: app/app_api
     container_name: app_api
-#    command: bash -c "python manage.py runserver 0.0.0.0:8000"
 #    command: bash -c "python main.py"
     command: bash -c "python -m daphne -b 0.0.0.0 -p 8000 server.asgi:application"
 #    restart: on-failure
     depends_on:
       - db-pg
       - redis
-#      - amqp
     networks:
       - net-stg
     env_file: ./api/config/.env
     environment:
       APP_API_PORT: 8000
 #      APP_API_HOST: http://gui
-#      APP_SERVICE_URL: amqp://guest:guest@amqp:5672/
       DJANGO_SETTINGS_MODULE: server.settings
       DJANGO_DATABASE_HOST: db-pg
       REDIS_HOST: redis
