@@ -1,5 +1,4 @@
 from celery.result import AsyncResult
-from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -9,9 +8,11 @@ from rest_framework.serializers import BaseSerializer
 from rest_framework.viewsets import ModelViewSet
 
 from django.db.models import QuerySet
+from django.http import JsonResponse
 
 from server.apps.video_tasks.models import VideoSource
 from server.apps.video_tasks.serializers import VideoSourceCreateSerializer, VideoSourceSerializer
+from server.apps.video_tasks.tasks import video_retrieve_metadata
 
 
 class VideoSourceModelViewSet(ModelViewSet):
@@ -27,7 +28,7 @@ class VideoSourceModelViewSet(ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
-        # app_config.service.send_to_controller(RenameFileRequest(id=serializer.instance.pk))
+        video_retrieve_metadata.delay(video_source_id=serializer.instance.pk)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

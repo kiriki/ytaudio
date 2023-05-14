@@ -5,6 +5,9 @@ from asgiref.sync import async_to_sync
 from celery import Task, shared_task
 from channels.layers import get_channel_layer
 
+from server.apps.video_tasks.dl_service import VideoDlService
+from server.apps.video_tasks.models import VideoSource
+
 log = logging.getLogger(__name__)
 
 
@@ -53,3 +56,17 @@ def sample_task_progress(task: Task, steps: int = 10) -> int:
     )
 
     return result
+
+
+@shared_task
+def video_retrieve_metadata(video_source_id: int) -> None:
+    video_source = VideoSource.objects.get(pk=video_source_id)
+
+    metadata = VideoDlService.get_metadata(video_url=video_source.url)
+    VideoDlService.fill_metadata(video_source, metadata)
+
+
+@shared_task
+def video_download_audio(video_source_id: int) -> None:
+    video_source = VideoSource.objects.get(pk=video_source_id)
+    VideoDlService.download_audio(video_source)

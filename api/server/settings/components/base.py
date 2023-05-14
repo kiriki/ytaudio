@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 
 from server.settings.components import BASE_DIR, config
 
@@ -93,6 +94,13 @@ USE_TZ = True
 
 STATIC_URL = 'backend/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+FILE_UPLOAD_TEMP_DIR = BASE_DIR / 'tmp'
+
+APP_API_MEDIAS_DIR = os.environ.get('APP_API_MEDIAS_DIR', BASE_DIR)
+MEDIA_ROOT = APP_API_MEDIAS_DIR / 'files' / 'media'
+
+MEDIA_URL = 'backend/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
