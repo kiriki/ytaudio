@@ -20,6 +20,7 @@ declare module '@vue/runtime-core' {
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElLink: typeof import('element-plus/es')['ElLink']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
@@ -39,6 +40,7 @@ declare module '@vue/runtime-core' {
     TasksView: typeof import('./src/components/TasksView.vue')['default']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
     UsersList: typeof import('./src/components/UsersList.vue')['default']
+    VideoTask: typeof import('./src/components/VideoTask.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
 }

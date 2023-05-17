@@ -1,9 +1,11 @@
 import logging
 import time
 
+import yt_dlp
 from asgiref.sync import async_to_sync
 from celery import Task, shared_task
 from channels.layers import get_channel_layer
+from django.db import IntegrityError
 
 from server.apps.video_tasks.dl_service import VideoDlService
 from server.apps.video_tasks.models import VideoSource
@@ -62,8 +64,16 @@ def sample_task_progress(task: Task, steps: int = 10) -> int:
 def video_retrieve_metadata(video_source_id: int) -> None:
     video_source = VideoSource.objects.get(pk=video_source_id)
 
-    metadata = VideoDlService.get_metadata(video_url=video_source.url)
-    VideoDlService.fill_metadata(video_source, metadata)
+    try:
+        metadata = VideoDlService.get_metadata(video_url=video_source.url)
+    except yt_dlp.utils.DownloadError as e:
+        video_source.delete()
+        data = {'error': e.msg}
+    else:
+        video_source = VideoDlService.fill_metadata(video_source, metadata)
+        data = {'action': 'reload', 'task_pk': video_source.pk}
+
+    update_ws({'type': 'task_update_message', 'data': data})
 
 
 @shared_task

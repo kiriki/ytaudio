@@ -35,6 +35,7 @@
           <el-menu :router="true">
             <el-menu-item index="/">Home</el-menu-item>
             <el-menu-item index="/users">Users</el-menu-item>
+            <el-menu-item index="/task">Task</el-menu-item>
             <el-menu-item index="/tasks">Tasks</el-menu-item>
             <el-menu-item index="/debug">Debug </el-menu-item>
           </el-menu>
@@ -69,7 +70,7 @@ onMounted(() => {
   console.log('App is mounted!')
   // todo проверять валидность токена, если присутствует
   authStore.loginRestore()
-  notifyStore.notificationsConnect(0)
+  notifyStore.notificationsConnect()
 })
 </script>
 

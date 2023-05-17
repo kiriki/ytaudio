@@ -3,6 +3,7 @@ import UsersList from '@/components/UsersList.vue'
 import HomeView from '@/views/HomeView.vue'
 import TasksView from '@/views/TasksView.vue'
 import DebugView from '@/views/DebugView.vue'
+import SingleTaskView from '@/views/SingleTaskView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/tasks',
       name: 'tasks',
       component: TasksView
+    },
+    {
+      path: '/task',
+      name: 'task',
+      component: SingleTaskView,
     },
     {
       path: '/debug',

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pytest
+import yt_dlp
 from rest_framework import status
 
 from django.urls import reverse
@@ -19,6 +21,8 @@ if TYPE_CHECKING:
 
 tasks_path = reverse('api:videosource-list')
 yt_url = 'https://www.youtube.com/watch?v=A37eEkFALxc'
+yt_url_wrong = 'https://www.youtube.com/watch?v=A37eEkFALx1'
+
 metadata_path = Path(__file__).parent / Path('data/video_metadata_fixture.json')
 
 
@@ -93,6 +97,12 @@ def video_source(video_source_clear: VideoSource, metadata: VideoMetadata) -> Vi
 
 
 @pytest.mark.django_db
+def test_wrong_video_metadata():
+    with pytest.raises(yt_dlp.utils.DownloadError):
+        VideoDlService.get_metadata(yt_url_wrong)
+
+
+@pytest.mark.django_db
 def test_fill_metadata(video_source_clear: VideoSource, metadata: VideoMetadata):
     VideoDlService.fill_metadata(video_source_clear, metadata)
     video_source = VideoSource.objects.get(pk=video_source_clear.pk)
@@ -103,6 +113,7 @@ def test_fill_metadata(video_source_clear: VideoSource, metadata: VideoMetadata)
     assert video_source.channel
     assert video_source.duration > 0
     assert video_source.thumbnail
+    assert video_source.upload_date > date(1900, 1, 1)
 
 
 @pytest.mark.django_db

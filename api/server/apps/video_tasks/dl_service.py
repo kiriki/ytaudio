@@ -1,19 +1,18 @@
 from __future__ import annotations
 
-import datetime
 import os
 from contextlib import contextmanager
+from datetime import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, TypedDict
+from typing import TypedDict
 
 import yt_dlp
+from django.db import IntegrityError
 from pytz import utc
-
 from django.conf import settings
 from django.core.files import File
 
-if TYPE_CHECKING:
-    from server.apps.video_tasks.models import VideoSource
+from server.apps.video_tasks.models import VideoSource
 
 
 class VideoMetadata(TypedDict):
@@ -26,7 +25,7 @@ class VideoMetadata(TypedDict):
     thumbnail: str
     webpage_url: str
     timestamp: int
-    epoch: int
+    upload_date: str
 
 
 @contextmanager
@@ -49,7 +48,7 @@ class VideoDlService:
             return VideoMetadata(**ydl.sanitize_info(info))
 
     @staticmethod
-    def fill_metadata(video_source: VideoSource, metadata: VideoMetadata) -> None:
+    def fill_metadata(video_source: VideoSource, metadata: VideoMetadata) -> VideoSource:
         video_source.extractor = metadata.get('extractor', '')
         video_source.source_id = metadata.get('id', '')
         video_source.title = metadata.get('title', '')
@@ -58,10 +57,21 @@ class VideoDlService:
         video_source.thumbnail = metadata.get('thumbnail', '')
         video_source.url = metadata.get('webpage_url', '')
 
-        if timestamp := metadata.get('timestamp') or metadata.get('epoch'):
-            video_source.upload_date = datetime.datetime.fromtimestamp(timestamp, tz=utc)
-
-        video_source.save()
+        if timestamp := metadata.get('timestamp'):
+            video_source.upload_date = datetime.fromtimestamp(timestamp, tz=utc)
+        elif date := metadata.get('upload_date'):
+            video_source.upload_date = datetime.strptime(date, '%Y%m%d').replace(tzinfo=utc).date()
+        try:
+            video_source.save()
+        except IntegrityError:
+            video_source_del = video_source
+            video_source = VideoSource.objects.get(
+                source_id=video_source.source_id,
+                extractor=video_source.extractor,
+            )
+            if video_source:
+                video_source_del.delete()
+        return video_source
 
     @staticmethod
     def download_audio(video_url: str, name: str = '') -> Path | None:

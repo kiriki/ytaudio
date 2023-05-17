@@ -12,6 +12,7 @@ def upload_directory_path(instance: VideoSource, filename: str) -> str:
     filename = f'{instance.channel} - {instance.title} {instance.source_id}'
     return f'user/dir/{filename}{extension}'
 
+
 class VideoSource(models.Model):
     url = URLField(max_length=255)
     added_date = models.DateTimeField(auto_now_add=True)
