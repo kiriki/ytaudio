@@ -1,4 +1,4 @@
-export interface VideoTask {
+export interface IVideoTask {
   id: number
   url: string
   extractor: string

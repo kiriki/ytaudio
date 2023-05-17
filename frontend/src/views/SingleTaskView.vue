@@ -1,53 +1,52 @@
 <script setup lang="ts">
-import { Ref, ref, watch } from 'vue'
+import { computed, Ref, ref, watch, onMounted } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { ElInput, ElMessage } from 'element-plus'
-import api from '@/api'
 import { useNotifyStore } from '@/stores/notify'
+import { useTasksStore } from '@/stores/tasks'
+
 import VideoTask from '@/components/VideoTask.vue'
+import { AxiosError } from 'axios'
 
 const UrlInputRef: Ref<typeof ElInput | null> = ref(null)
-const input = ref('')
-const currentTaskData = ref({})
-const currentTaskId: Ref<number | null> = ref(null)
+const UrlInputData = ref('')
 
-const store = useNotifyStore()
+const storeNotify = useNotifyStore()
+const storeTasks = useTasksStore()
 
-const onEsc = () => {
-  UrlInputRef.value?.clear()
-  // UrlInputRef.value?.blur()
-}
+const currentTask = computed(() => storeTasks.currentTask)
+
+const onEsc = () => UrlInputRef.value?.clear()
 const handleAddTask = async () => {
   console.log('handleAddTask')
-  const { data } = await api().post('tasks/', { 'url': input.value })
-  currentTaskData.value = data
-  console.log(data)
+  try {
+    await storeTasks.getTaskFromUrl(UrlInputData.value)
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      for (const errorKey in e.response?.data) {
+        e.response.data[errorKey].forEach((errorValue: string) =>
+          ElMessage.error(`${errorKey}: ${errorValue}`))
+      }
+    }
+  }
   UrlInputRef.value?.clear()
 }
 
-watch(() => store.message, (value) => {
+onMounted(() => storeTasks.loadCurrentTask())
+
+watch(() => storeNotify.message, (value) => {
   if (!value) return
   const { data } = value
-  if ('error' in data) {
-    ElMessage(data.error)
-  }
 
+  if ('error' in data) ElMessage(data.error)
   if ('action' in data) {
     if (data.action === 'reload') {
       console.log('reload task')
-      currentTaskId.value = data.task_pk
-      reloadCurrentTask()
+      storeTasks.setCurrentTaskId(data.task_pk)
+      storeTasks.loadCurrentTask()
     }
   }
-  // if (currentTask.value) {
-  //   currentTask.value.task_status = value.data.state
-  //   currentTask.value.task_result = value.data.meta['current_value']
-  // }
 })
-const reloadCurrentTask = async () => {
-  const { data } = await api().get(`tasks/${currentTaskId.value}`)
-  currentTaskData.value = data
-}
 
 </script>
 
@@ -56,23 +55,21 @@ const reloadCurrentTask = async () => {
     <el-col :span="6">
       <el-input
         ref="UrlInputRef"
-        v-model="input" placeholder="Video url" clearable size="small"
+        v-model="UrlInputData" placeholder="Video url" clearable size="small"
         @keyup.enter="handleAddTask"
         @keydown.esc="onEsc"
       >
         <template #append>
           <el-button @click="handleAddTask" type="primary" :icon="Plus">
-            Add
+            Load
           </el-button>
         </template>
       </el-input>
     </el-col>
   </el-row>
-  <pre>
-    {{ input }}
-  </pre>
-  <h3>task:</h3>
-  <video-task :model-value="currentTaskData" />
+  <pre v-if="currentTask">{{ currentTask.id }}</pre>
+
+  <video-task :videoData="currentTask" v-if="currentTask" />
 </template>
 
 <style scoped>
