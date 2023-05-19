@@ -7,10 +7,11 @@ from pathlib import Path
 from typing import TypedDict
 
 import yt_dlp
-from django.db import IntegrityError
 from pytz import utc
+
 from django.conf import settings
 from django.core.files import File
+from django.db import IntegrityError
 
 from server.apps.video_tasks.models import VideoSource
 
@@ -20,7 +21,7 @@ class VideoMetadata(TypedDict):
     id: str
     title: str
     channel: str
-    uploader: str
+    uploader_id: str
     duration: int
     thumbnail: str
     webpage_url: str
@@ -52,7 +53,8 @@ class VideoDlService:
         video_source.extractor = metadata.get('extractor', '')
         video_source.source_id = metadata.get('id', '')
         video_source.title = metadata.get('title', '')
-        video_source.channel = metadata.get('channel', '') or metadata.get('uploader', '')
+        video_source.channel = metadata.get('channel', '')
+        video_source.uploader_id = metadata.get('uploader_id', '')
         video_source.duration = metadata.get('duration', 0)
         video_source.thumbnail = metadata.get('thumbnail', '')
         video_source.url = metadata.get('webpage_url', '')

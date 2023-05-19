@@ -1,4 +1,5 @@
 import { useNotifyStore } from '@/stores/notify'
+import { notifier } from '@/ems'
 
 const BASE_HTTP_PROTO = 'http'
 const WS_PROTO = `ws${window.location.protocol.slice(BASE_HTTP_PROTO.length)}`
@@ -21,6 +22,8 @@ const onMessage = (event: MessageEvent) => {
   try {
     const payload = JSON.parse(event.data)
     store.receiveNotification(payload)
+    notifier.emit('ws_message', payload)
+
   } catch (e) {
     console.error('Error in receive ws message', e)
   }

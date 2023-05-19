@@ -23,6 +23,7 @@ class VideoSource(models.Model):
     extractor = models.CharField(max_length=50, blank=True)
     title = models.CharField(blank=True)
     channel = models.CharField(blank=True)
+    uploader_id = models.CharField(blank=True)
     duration = models.PositiveSmallIntegerField(default=0)
     upload_date = models.DateField(default='1900-01-01')
     thumbnail = URLField(max_length=255, blank=True)

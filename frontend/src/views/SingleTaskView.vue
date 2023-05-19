@@ -67,8 +67,7 @@ watch(() => storeNotify.message, (value) => {
       </el-input>
     </el-col>
   </el-row>
-  <pre v-if="currentTask">{{ currentTask.id }}</pre>
-
+  <!--  <pre v-if="currentTask">{{ currentTask.id }}</pre>-->
   <video-task :videoData="currentTask" v-if="currentTask" />
 </template>
 

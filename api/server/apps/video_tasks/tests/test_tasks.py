@@ -20,7 +20,8 @@ if TYPE_CHECKING:
     from django.contrib.auth.models import User
 
 tasks_path = reverse('api:videosource-list')
-yt_url = 'https://www.youtube.com/watch?v=A37eEkFALxc'
+# yt_url = 'https://www.youtube.com/watch?v=A37eEkFALxc'
+yt_url = 'https://www.youtube.com/watch?v=7lBRKIaoKUY'
 yt_url_wrong = 'https://www.youtube.com/watch?v=A37eEkFALx1'
 
 metadata_path = Path(__file__).parent / Path('data/video_metadata_fixture.json')
@@ -100,6 +101,12 @@ def video_source(video_source_clear: VideoSource, metadata: VideoMetadata) -> Vi
 def test_wrong_video_metadata():
     with pytest.raises(yt_dlp.utils.DownloadError):
         VideoDlService.get_metadata(yt_url_wrong)
+
+
+@pytest.mark.django_db
+def test_get_video_metadata():
+    md = VideoDlService.get_metadata(yt_url)
+    print(md)
 
 
 @pytest.mark.django_db
