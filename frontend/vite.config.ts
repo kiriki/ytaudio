@@ -68,6 +68,10 @@ export default defineConfig({
       '/api': {
         target: 'http://host.docker.internal:8000',
         changeOrigin: true,
+        xfwd: true,
+      },
+      '/backend': {
+        target: 'http://host.docker.internal:8000',
       },
       '/ws': {
         target: 'ws://host.docker.internal:8000',

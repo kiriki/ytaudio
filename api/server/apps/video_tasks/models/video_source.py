@@ -14,7 +14,7 @@ def upload_directory_path(instance: VideoSource, filename: str) -> str:
 
 
 class VideoSource(models.Model):
-    url = URLField(max_length=255)
+    url = URLField(max_length=255, unique=True)
     added_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

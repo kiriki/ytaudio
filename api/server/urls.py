@@ -20,6 +20,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from server.apps.users.sample_view import index_test
 from server.apps.users.views import LoginView, LogoutView, UserViewSet
@@ -47,3 +49,6 @@ urlpatterns += [
 
 # path('schema/', get_schema_view(title='Q Site API')),
 # path('docs/', include_docs_urls(title='Q Site API service')),
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

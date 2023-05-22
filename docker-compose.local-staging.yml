@@ -60,6 +60,8 @@ services:
       DJANGO_DATABASE_HOST: db-pg
       REDIS_HOST: redis
       DJANGO_ENV: production
+    volumes:
+      - media_vol:/app/mediafiles
     depends_on:
       - db-pg
       - redis
@@ -76,7 +78,7 @@ services:
     volumes:
       - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf
       - static_vol:/var/www/backend/static
-      - media_vol:/var/www/backend/mediafiles
+      - media_vol:/var/www/backend/media
     ports:
       - "80:80"
     depends_on:

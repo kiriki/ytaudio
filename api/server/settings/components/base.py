@@ -98,9 +98,11 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / 'tmp'
 
 APP_API_MEDIAS_DIR = os.environ.get('APP_API_MEDIAS_DIR', BASE_DIR)
-MEDIA_ROOT = APP_API_MEDIAS_DIR / 'files' / 'media'
+MEDIA_ROOT = APP_API_MEDIAS_DIR / 'mediafiles'
 
 MEDIA_URL = 'backend/media/'
+
+USE_X_FORWARDED_HOST = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
