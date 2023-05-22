@@ -47,6 +47,7 @@ class VideoSourceModelViewSet(ModelViewSet):
     def run_task(self, request: Request, *args, **kwargs) -> JsonResponse:
         tasks = {
             'sample_task_progress': 'server.apps.video_tasks.tasks.sample_task_progress',
+            'fetch_audio_task': 'server.apps.video_tasks.tasks.video_download_audio',
         }
 
         if task_name := request.data.pop('task_name'):

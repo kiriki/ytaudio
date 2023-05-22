@@ -7,6 +7,7 @@ WORKDIR /app
 COPY poetry.lock pyproject.toml /app/
 
 RUN poetry install --no-interaction --no-ansi --no-root --no-dev
+RUN apt-get update && apt-get install -y ffmpeg
 
 COPY . /app
 

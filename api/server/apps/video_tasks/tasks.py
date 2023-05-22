@@ -78,6 +78,15 @@ def video_retrieve_metadata(video_source_id: int) -> None:
 
 
 @shared_task
-def video_download_audio(video_source_id: int) -> None:
+def video_download_audio(*, video_source_id: int) -> None:
+    log.info(f'video_download_audio, {video_source_id=}')
+
     video_source = VideoSource.objects.get(pk=video_source_id)
-    VideoDlService.download_audio(video_source)
+
+    result_audio_path = VideoDlService.download_audio(video_source.url)
+    VideoDlService.store_audio(video_source, result_audio_path)
+
+    log.info('video_download_audio done')
+
+    data = {'action': 'reload', 'task_pk': video_source.pk}
+    update_ws({'type': 'task_update_message', 'data': data})
