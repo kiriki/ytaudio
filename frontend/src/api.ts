@@ -30,8 +30,11 @@ const api = (path = 'api/v1') => {
           await authStore.refresh()
           instance.defaults.headers.Authorization = authStore.jwtToken
           return axiosFn()
+        } else if (e.response?.data.code === 'user_not_found') {
+          authStore.logout()
         } else {
           console.error('api call error', e.response?.data || e)
+          authStore.logout()
           throw e
         }
       } else throw e

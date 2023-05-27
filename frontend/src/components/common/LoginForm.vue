@@ -114,7 +114,7 @@ const doSubmit = async () => {
     console.error('login error')
     passwordRef.value?.resetField()
 
-    const message = (data as object).non_field_errors?.[0] || `${status} (${statusText})`
+    const message = (data as object).detail || `${status} (${statusText})`
 
     ElNotification.error({
       title: 'Login Error',
