@@ -1,10 +1,11 @@
-<script setup lang="ts">
-import TheWelcome from '@/components/TheWelcome.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <main>
-    HomeView
-<!--    <TheWelcome />-->
-  </main>
+  <el-empty>
+    <template #description>
+      There is nothing here yet. <br>Please switch to the
+      <el-link type="primary" href="/task">Task</el-link>
+      tab.
+    </template>
+  </el-empty>
 </template>
