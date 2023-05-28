@@ -1,3 +1,6 @@
+# YouTube audio downloader
+App to extract and download audio track from a YouTube video.
+
 1. Create and fill `api/config/.env` file using the provided template `api/config/.env.template`. You can make a copy of it and specify the values of the environment variables. At least, you will need to specify values for the `DJANGO_SECRET_KEY` and `DOMAIN_NAME` variables, which are used for Django application.
 
 2. Build containers
@@ -21,4 +24,4 @@
 - redis: [redis](https://redis.io/)
 
 ## Features
-A simple application that provides the ability to extract and download the audio track from a YouTube video. For this purpose, [yt-dlp](https://github.com/yt-dlp/yt-dlp) is used in conjunction with the capabilities of the ffmpeg library.
+A simple SPA application that provides the ability to extract and download the audio track from a YouTube video. For this purpose, [yt-dlp](https://github.com/yt-dlp/yt-dlp) is used in conjunction with the capabilities of the ffmpeg library.
