@@ -1,20 +1,12 @@
 <script setup lang="ts">
-import api from '@/api'
-import { Ref, ref, watch } from 'vue'
+import { Ref, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useNotifyStore } from '@/stores/notify'
-import { sleep } from '@/utils/tools'
+
+import api from '@/api'
 import { notifier } from '@/ems'
+import type { IClTask } from '@/interfaces/tasks'
 
-const isRunningTask = ref(false)
 const currentTask: Ref<IClTask | null> = ref(null)
-
-interface IClTask {
-  action: string
-  task_id: string
-  task_status: string
-  task_result: number
-}
 
 const startTask = async (taskName: string, params = {}) => {
   const { data } = await api().post('tasks/run_task/', { task_name: taskName, params })
@@ -26,26 +18,8 @@ const startTask = async (taskName: string, params = {}) => {
 
 const runSampleTask = async () => {
   console.log('runSampleTask')
-  // isRunningTask.value = true
   currentTask.value = await startTask('sample_task_progress', { steps: 5 })
-  // await waitTaskDone(currentTask.value.task_id)//  wait for result
-  // isRunningTask.value = false
 }
-
-// const waitTaskDone = async (taskId: string) => {
-//   console.log('waitTaskDone', taskId)
-//   while (isRunningTask.value) {
-//     await sleep(1000)
-//     const params = { task_id: taskId }
-//     const { data }: { data: IClTask } = await api().get('tasks/get_task_status', { params })
-//     currentTask.value = data // call on progress here ?
-//     console.log('waitTaskDone', data)
-//     if (currentTask.value.task_status === 'SUCCESS' || currentTask.value.task_status === 'FAILURE') break
-//   }
-//
-//   console.log('task is done: ', currentTask.value)
-//   return currentTask.value
-// }
 
 notifier.on('ws_message', e => {
   console.log('emitter ws_message', e)

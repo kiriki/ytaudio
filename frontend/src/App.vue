@@ -11,10 +11,9 @@
           type="flex"
         >
           <el-col :span="6">
-
           </el-col>
           <el-col
-            :span="1"
+            :span="2"
             style="display: flex"
           >
             <LoginForm />
@@ -32,12 +31,18 @@
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <el-menu :router="true">
-            <el-menu-item index="/">Home</el-menu-item>
-            <el-menu-item index="/users">Users</el-menu-item>
-            <el-menu-item index="/task">Task</el-menu-item>
-            <el-menu-item index="/tasks">Tasks</el-menu-item>
-            <el-menu-item index="/debug">Debug </el-menu-item>
+          <el-menu :router="true"  :collapse="true">
+            <el-menu-item index="/">
+              <el-icon><HomeFilled /></el-icon>
+              <template #title>Home</template>
+            </el-menu-item>
+            <el-menu-item index="/task">
+              <el-icon><VideoPlay /></el-icon>
+              <template #title>Current Task</template>
+            </el-menu-item>
+<!--            <el-menu-item index="/users">Users</el-menu-item>-->
+<!--            <el-menu-item index="/tasks">Tasks</el-menu-item>-->
+<!--            <el-menu-item index="/debug">Debug </el-menu-item>-->
           </el-menu>
         </el-aside>
         <el-main>
@@ -54,6 +59,8 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue'
 import ru from 'element-plus/lib/locale/lang/ru'
+
+import { HomeFilled, VideoPlay} from '@element-plus/icons-vue'
 
 import LoginForm from '@/components/common/LoginForm.vue'
 import { toggleDark } from '@/composables'

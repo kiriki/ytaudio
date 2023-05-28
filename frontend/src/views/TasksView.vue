@@ -7,15 +7,24 @@
     </el-col>
   </el-row>
   <el-table :data="tasksData">
-    <el-table-column label="Video" width="400">
+    <el-table-column label="Video" width="300">
       <template #default="{row}">
         <el-link :href="row.url" target="_blank">
           {{ row.title }}
         </el-link>
       </template>
     </el-table-column>
-    <el-table-column prop="duration" label="duration" width="100" />
+    <el-table-column prop="duration" label="Duration" width="80">
+      <template #default="{row}">
+        <time class="time">{{ formatTime(row.duration) }}</time>
+      </template>
+    </el-table-column>
     <el-table-column prop="upload_date" label="upload date" width="200" />
+    <el-table-column prop="file" label="File" width="200">
+      <template #default="{row}">
+        <a :href="row.file" target="_blank" download>mp3</a>
+      </template>
+    </el-table-column>
     <el-table-column prop="user" label="user" width="200" />
   </el-table>
 </template>
@@ -26,6 +35,7 @@ import { onMounted, ref, watch } from 'vue'
 
 import api from '@/api'
 import { useNotifyStore } from '@/stores/notify'
+import { formatTime } from '@/filters/formatters'
 
 const store = useNotifyStore()
 

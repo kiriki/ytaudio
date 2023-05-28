@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { computed, Ref, ref, watch, onMounted } from 'vue'
+import { computed, onMounted, ref, Ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { ElInput, ElMessage } from 'element-plus'
-import { useNotifyStore } from '@/stores/notify'
 import { useTasksStore } from '@/stores/tasks'
 
 import VideoTask from '@/components/VideoTask.vue'
 import { AxiosError } from 'axios'
+import { notifier } from '@/ems'
 
 const UrlInputRef: Ref<typeof ElInput | null> = ref(null)
 const UrlInputData = ref('')
 
-const storeNotify = useNotifyStore()
 const storeTasks = useTasksStore()
 
 const currentTask = computed(() => storeTasks.currentTask)
@@ -34,7 +33,7 @@ const handleAddTask = async () => {
 
 onMounted(() => storeTasks.loadCurrentTask())
 
-watch(() => storeNotify.message, (value) => {
+notifier.on('ws_message', value => {
   if (!value) return
   const { data } = value
 
