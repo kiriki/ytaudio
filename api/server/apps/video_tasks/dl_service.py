@@ -35,6 +35,7 @@ def cd(path: Path) -> None:
     change current directory with cm
     """
     cwd = Path.cwd()
+    path.mkdir(parents=True, exist_ok=True)
     os.chdir(path)
     yield
     os.chdir(cwd)

@@ -31,7 +31,6 @@ services:
       dockerfile: ./Dockerfile
     image: app/app_api
     container_name: app_api
-#    command: bash -c "python main.py"
     command: bash -c "python -m daphne -b 0.0.0.0 -p 8000 server.asgi:application"
 #    restart: on-failure
     depends_on:

@@ -96,6 +96,7 @@ STATIC_URL = 'backend/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / 'tmp'
+FILE_UPLOAD_TEMP_DIR.mkdir(parents=True, exist_ok=True)
 
 APP_API_MEDIAS_DIR = os.environ.get('APP_API_MEDIAS_DIR', BASE_DIR)
 MEDIA_ROOT = APP_API_MEDIAS_DIR / 'mediafiles'
