@@ -1,5 +1,5 @@
 # YouTube audio downloader
-App to extract and download audio track from a YouTube video.
+Simple web app to extract and download audio track from a YouTube video.
 
 1. Create and fill `api/config/.env` file using the provided template `api/config/.env.template`. You can make a copy of it and specify the values of the environment variables. At least, you will need to specify values for the `DJANGO_SECRET_KEY` and `DOMAIN_NAME` variables, which are used for Django application.
 
@@ -15,7 +15,7 @@ App to extract and download audio track from a YouTube video.
 - username: `admin`
 - pass: `admin`
 
-## services
+## Services
 - api: [django](https://www.djangoproject.com/), [django rest framework](https://www.django-rest-framework.org/) - main app logic
 - db-pg: [postgres](https://www.postgresql.org/) - main data storage
 - celery_worker: [celery](https://docs.celeryq.dev/en/stable/) - distributed task queue
