@@ -26,6 +26,9 @@ CSRF_COOKIE_SECURE = False
 # CSRF_COOKIE_HTTPONLY = False
 # SESSION_COOKIE_SECURE = False
 
-REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ('rest_framework.renderers.JSONRenderer',)
+REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = (
+    'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+    'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
+)
 
 CSRF_TRUSTED_ORIGINS = (f'http://*{config("DOMAIN_NAME")}/',)

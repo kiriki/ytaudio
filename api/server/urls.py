@@ -17,11 +17,11 @@ Including another URLconf
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
+from django.conf import settings
 from django.conf.urls import include
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
 
 from server.apps.users.sample_view import index_test
 from server.apps.users.views import LoginView, LogoutView, UserViewSet

@@ -9,3 +9,4 @@ mediafiles
 build
 *.egg-info
 db.sqlite3
+tmp
