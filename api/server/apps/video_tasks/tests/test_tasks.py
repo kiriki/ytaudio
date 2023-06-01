@@ -50,12 +50,16 @@ def test_create_task_anon(anon_client: APIClient):
 
 @pytest.mark.django_db
 def test_create_task(client: APIClient):
-    response = client.post(
-        tasks_path,
-        data={'url': yt_url},
-        format='json',
-    )
+    kwargs = {
+        'path': tasks_path,
+        'data': {'url': yt_url},
+        'format': 'json',
+    }
+
+    response = client.post(**kwargs)
     assert response.status_code == status.HTTP_201_CREATED
+    response = client.post(**kwargs)
+    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.django_db

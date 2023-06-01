@@ -1,3 +1,4 @@
+import functools
 import logging
 import time
 
@@ -5,8 +6,6 @@ import yt_dlp
 from asgiref.sync import async_to_sync
 from celery import Task, shared_task
 from channels.layers import get_channel_layer
-
-from django.db import IntegrityError
 
 from server.apps.video_tasks.dl_service import VideoDlService
 from server.apps.video_tasks.models import VideoSource
@@ -77,16 +76,52 @@ def video_retrieve_metadata(video_source_id: int) -> None:
     update_ws({'type': 'task_update_message', 'data': data})
 
 
+def on_progress_download(task_id: int, data: dict) -> None:
+    p_data = {
+        'status': data['status'],
+        'downloaded': data.get('downloaded_bytes', 0),
+        'total': data.get('total_bytes') or int(data.get('total_bytes_estimate', 0)),
+    }
+
+    ws_data = {
+        'task_pk': task_id,
+        'progress': p_data,
+    }
+
+    update_ws({'type': 'task_update_message', 'data': ws_data})
+
+
 @shared_task
 def video_download_audio(*, video_source_id: int) -> None:
     log.info(f'video_download_audio, {video_source_id=}')
 
     video_source = VideoSource.objects.get(pk=video_source_id)
 
-    result_audio_path = VideoDlService.download_audio(video_source.url)
+    on_progress = functools.partial(on_progress_download, video_source_id)
+    result_audio_path = VideoDlService.download_audio(video_source.url, on_progress=on_progress)
     VideoDlService.store_audio(video_source, result_audio_path)
 
     log.info('video_download_audio done')
+
+    data = {'action': 'reload', 'task_pk': video_source.pk}
+    update_ws({'type': 'task_update_message', 'data': data})
+
+
+@shared_task
+def video_download_audio_mock(*, video_source_id: int) -> None:
+    log.info(f'video_download_audio, {video_source_id=}')
+    on_progress = functools.partial(on_progress_download, video_source_id)
+    video_source = VideoSource.objects.get(pk=video_source_id)
+
+    for k in range(50):
+        time.sleep(0.1)
+        data = {'status': 'downloading', 'downloaded_bytes': k, 'total_bytes': 50}
+        on_progress(data)
+
+    data = {'status': 'finished', 'downloaded_bytes': 50, 'total_bytes': 50}
+    on_progress(data)
+
+    time.sleep(2)
 
     data = {'action': 'reload', 'task_pk': video_source.pk}
     update_ws({'type': 'task_update_message', 'data': data})

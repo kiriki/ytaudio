@@ -38,9 +38,6 @@ class VideoSourceModelViewSet(ModelViewSet):
         self.perform_create(serializer)
         video_retrieve_metadata.delay(video_source_id=serializer.instance.pk)
         headers = self.get_success_headers(serializer.data)
-
-        video_retrieve_metadata.delay(video_source_id=serializer.instance.pk)
-
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def destroy(self, request: Request, *args, **kwargs) -> Response:
@@ -59,6 +56,7 @@ class VideoSourceModelViewSet(ModelViewSet):
         tasks = {
             'sample_task_progress': 'server.apps.video_tasks.tasks.sample_task_progress',
             'fetch_audio_task': 'server.apps.video_tasks.tasks.video_download_audio',
+            'fetch_audio_task_mock': 'server.apps.video_tasks.tasks.video_download_audio_mock',
         }
 
         if task_name := request.data.pop('task_name'):

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Callable
 from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
@@ -77,7 +78,8 @@ class VideoDlService:
         return video_source
 
     @staticmethod
-    def download_audio(video_url: str, name: str = '') -> Path | None:
+    def download_audio(video_url: str, name: str = '', on_progress: Callable[[dict], None] = None) -> Path | None:
+        on_progress = on_progress or (lambda _: None)
         codec = 'mp3'  # m4a
         name = name.split('.')[0]
         # ext_file_name = name or '%(id)s.%(ext)s'
@@ -92,6 +94,7 @@ class VideoDlService:
                     'preferredcodec': codec,
                 }
             ],
+            'progress_hooks': [on_progress],
         }
 
         with (
