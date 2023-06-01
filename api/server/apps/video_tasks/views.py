@@ -25,7 +25,18 @@ class VideoSourceModelViewSet(ModelViewSet):
     def create(self, request: Request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        # prevent on url duplicate IntegrityError
+        if instance := VideoSource.objects.filter(
+            url=serializer.validated_data['url'],
+        ).first():
+            serializer = self.get_serializer(instance)
+            video_retrieve_metadata.delay(video_source_id=serializer.instance.pk)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+
         self.perform_create(serializer)
+        video_retrieve_metadata.delay(video_source_id=serializer.instance.pk)
         headers = self.get_success_headers(serializer.data)
 
         video_retrieve_metadata.delay(video_source_id=serializer.instance.pk)
