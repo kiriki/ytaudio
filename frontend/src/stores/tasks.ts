@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import api from '@/api'
-import type { IVideoTask } from '@/components/task'
+import type { IVideoTask } from '@/interfaces/tasks'
 import { useLsStore } from '@/stores/ls'
+import type { AxiosResponse } from 'axios'
 
 interface State {
   currentTaskId: number | null
@@ -19,9 +20,7 @@ export const useTasksStore = defineStore({
   }),
 
   getters: {
-    getStateValue: state => {
-      return state.stateValue
-    }
+    getCurrentTask: state => state.currentTask
   },
 
   actions: {
@@ -44,13 +43,13 @@ export const useTasksStore = defineStore({
     async loadCurrentTask () {
       this.loadCurrentTaskId()
       if (!this.currentTaskId) return
-      const { data } = await api().get(`tasks/${this.currentTaskId}`)
+      const { data } = await api().get(`tasks/${this.currentTaskId}`) as AxiosResponse<IVideoTask>
       this.currentTask = <IVideoTask>data
     },
 
     async getTaskFromUrl (videoUrl: string) {
-      const { data } = await api().post('tasks/', { 'url': videoUrl })
-      this.currentTask = <IVideoTask>data
+      const { data } = await api().post('tasks/', { 'url': videoUrl }) as AxiosResponse<IVideoTask>
+      this.currentTask = data
       // this.setCurrentTaskId(this.currentTask.id)
     }
   },

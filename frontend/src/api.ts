@@ -34,7 +34,6 @@ const api = (path = 'api/v1') => {
           authStore.logout()
         } else {
           console.error('api call error', e.response?.data || e)
-          authStore.logout()
           throw e
         }
       } else throw e

@@ -6,7 +6,6 @@ import { useTasksStore } from '@/stores/tasks'
 
 import VideoTask from '@/components/VideoTask.vue'
 import { AxiosError } from 'axios'
-import { notifier } from '@/ems'
 
 const UrlInputRef: Ref<typeof ElInput | null> = ref(null)
 const UrlInputData = ref('')
@@ -16,6 +15,7 @@ const storeTasks = useTasksStore()
 const currentTask = computed(() => storeTasks.currentTask)
 
 const onEsc = () => UrlInputRef.value?.clear()
+
 const handleAddTask = async () => {
   console.log('handleAddTask')
   try {
@@ -33,19 +33,6 @@ const handleAddTask = async () => {
 
 onMounted(() => storeTasks.loadCurrentTask())
 
-notifier.on('ws_message', value => {
-  if (!value) return
-  const { data } = value
-
-  if ('error' in data) ElMessage(data.error)
-  if ('action' in data) {
-    if (data.action === 'reload') {
-      console.log('reload task')
-      storeTasks.setCurrentTaskId(data.task_pk)
-      storeTasks.loadCurrentTask()
-    }
-  }
-})
 
 </script>
 
